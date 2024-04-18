@@ -1,0 +1,16 @@
+{
+    "name": "Lightning Pub",
+    "version": "1.0.0",
+    "description": "Your app description",
+    "dockerCompose": {
+        "version": "3.7",
+        "services": {
+            "web": {
+                "image": "your-docker-hub-username/lightning.pub:1.0.0",
+                "restart": "on-failure",
+                "ports": ["3000:3000"],
+                "volumes": ["${APP_DATA_DIR}:/data"]
+            }
+        }
+    }
+}
