@@ -1,0 +1,58 @@
+version: "3.7"
+
+services:
+  web:
+    image: patchdemon115inc/lightning.pub:1.0.0@sha256:827ef2cf492f0ce712823ac3a8057a570e0a032ecd5876d07b885b1ab2958e93
+    restart: on-failure
+    stop_grace_period: 1m
+    volumes:
+      - ${APP_DATA_DIR}/lnd:/lnd
+      - ${APP_DATA_DIR}/db:/db
+    environment:
+      #LND
+      LND_ADDRESS: lnd:10009
+      LND_CERT_PATH: /lnd/tls.cert
+      LND_MACAROON_PATH: /lnd/data/chain/bitcoin/regtest/admin.macaroon
+      #DB
+      DATABASE_FILE: /db/db.sqlite
+      METRICS_DATABASE_FILE: /db/metrics.sqlite
+      #LOCAL
+      ADMIN_TOKEN: 123
+      PORT: 8090
+      JWT_SECRET: bigsecrethere
+      #LIGHTNING
+      OUTBOUND_MAX_FEE_BPS: 60
+      OUTBOUND_MAX_FEE_EXTRA_SATS: 100
+      #ROOT_FEES
+      INCOMING_CHAIN_FEE_ROOT_BPS: 0
+      INCOMING_INVOICE_FEE_ROOT_BPS: 0
+      OUTGOING_CHAIN_FEE_ROOT_BPS: 60 #applied to application debits
+      OUTGOING_INVOICE_FEE_ROOT_BPS: 60 #applied to application debits
+      TX_FEE_INTERNAL_ROOT_BPS: 60 #applied to inter-application txns
+      #APP_FEES
+      INCOMING_INVOICE_FEE_USER_BPS: 0 #app default
+      OUTGOING_INVOICE_FEE_USER_BPS: 60 #app default
+      TX_FEE_INTERNAL_USER_BPS: 60 #intra-application tx default
+      #NOSTR
+      NOSTR_RELAYS: wss://strfry.shock.network
+      #LNURL
+      #Note that a reachable https endpoint for the service to handle lnurl requests is required for lightning address bridges
+      SERVICE_URL: https://test.lightning.pub
+      #DEV
+      MOCK_LND: false
+      ALLOW_BALANCE_MIGRATION: false
+      MIGRATE_DB: false
+      LND_OTHER_ADDR: test
+      LND_OTHER_MACAROON_PATH: test
+      LND_THIRD_ADDR: test
+      LND_THIRD_CERT_PATH: test
+      LND_OTHER_CERT_PATH: test
+      LND_THIRD_MACAROON_PATH: test
+      #METRICS
+      RECORD_PERFORMANCE: true
+      SKIP_SANITY_CHECK: false
+      DISABLE_EXTERNAL_PAYMENTS: false
+      # Max difference between users balance and LND balance since beginning of app execution
+      WATCHDOG_MAX_DIFF_SATS: 10000
+      # Max difference between users balance and LND balance after each payment
+      WATCHDOG_MAX_UPDATE_DIFF_SATS: 1000

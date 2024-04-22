@@ -1,0 +1,11 @@
+name: Lightning Pub
+description: Lightning Network powered publishing platform
+version: 1.0.0
+developer: Shocknet Inc
+website: https://test.lightning.pub
+port: 8090
+path: /lightning-pub
+hiddenService: true
+backup:
+  ignore:
+    - "db/*.sqlite"
